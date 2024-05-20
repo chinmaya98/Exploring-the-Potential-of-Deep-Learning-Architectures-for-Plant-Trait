@@ -2,6 +2,11 @@ import tensorflow as tf
 
 class setupGPUS():
     def check_GPUS():
+        """
+        Input: N/A
+        Output: N/A
+        Function: Checks the no. of GPUs available in the system
+        """
         # Retrieve a list of GPU devices
         available_gpus = tf.config.list_physical_devices('GPU')
 

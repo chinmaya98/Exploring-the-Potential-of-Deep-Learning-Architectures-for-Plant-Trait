@@ -4,6 +4,11 @@ from sklearn.preprocessing import StandardScaler
 
 class preprocessData():
     def pre_process_data(train_csv):
+        """
+        Input: Dataframe
+        Output: Features and Labels
+        Function: Removes unnecessary variables from csv and returns clean csv
+        """
         TARGET = ['X4_mean', 'X11_mean', 'X18_mean','X26_mean', 'X50_mean', 'X3112_mean']
         Unnec = ['X4_mean', 'X11_mean', 'X18_mean','X26_mean', 'X50_mean', 'X3112_mean',
                 'X4_sd', 'X11_sd', 'X18_sd','X26_sd', 'X50_sd', 'X3112_sd', 'id']
@@ -18,7 +23,12 @@ class preprocessData():
         return train_csv, train_labels
 
     def adjust_image_attributes(image_features, target=None):
-        INPUT_SHAPE = (512, 512, 3)
+        """
+        Input: List of a tuble (image paths, tab_data)
+        Output: Vector of image and tab_data
+        Function: Reads all the image data and returns vector of images with tab_data
+        """
+        INPUT_SHAPE = (224, 224, 3)
         image_data = tf.io.read_file(image_features[0])
         image_data = tf.io.decode_jpeg(image_data)
         image_data = tf.image.resize(image_data, (INPUT_SHAPE[0], INPUT_SHAPE[1]))
@@ -28,8 +38,14 @@ class preprocessData():
             return (image_data, image_features[1])
         else:
             return ((image_data, image_features[1]), target)
+
     
     def split_data(train_img_path, train_csv, train_labels):
+        """
+        Input: Image path, climate features and labels
+        Output: Train, val and test of imagevector+tab_data+labels
+        Function: Adds the image, tab_data and label into a tensor and splits into train, val and test
+        """
         train_tensor_dataset = tf.data.Dataset.from_tensor_slices(((train_img_path,
                                                                     train_csv) , 
                                                                     train_labels))
@@ -48,6 +64,3 @@ class preprocessData():
         test_data = test_csv.map(preprocessData.adjust_image_attributes).batch(32).prefetch(16)
 
         return train_data, val_data, test_data
-
-
-        

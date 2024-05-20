@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+DATA255_Group2_Project
 
 # C extensions
 *.so
